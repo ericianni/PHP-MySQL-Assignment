@@ -19,8 +19,16 @@ function request (action) {
 
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			localStorage.setItem('videos', xmlhttp.responseText);
-			display();
+			if(action == 'categories') {
+				localStorage.setItem('categories', xmlhttp.responseText);
+				emptyElements('selectCategory', 'menu');
+				populateCategories();
+			} else {
+				localStorage.setItem('videos', xmlhttp.responseText);
+				display();
+				emptyElements('selectCategory', 'menu');
+				populateCategories();
+			}
 		}
 	}
 }
@@ -40,13 +48,15 @@ function display() {
 		deleteButton.setAttribute('onclick', 'deleteFunction(this.parentNode)');
 		deleteButton.innerHTML = 'Delete';
 		rentButton = document.createElement('div')
-		rentButton.setAttribute('class', 'rent');
 		rentButton.setAttribute('onclick', 'flipRent(this.parentNode)');
-		var rented = JSON.parse(localStorage.getItem('rented'));
-		if(rented) {
-			rentButton.innerHTML = 'Return';	
+		var rented = videos[prop]['rented'];
+		//console.log(rented);
+		if(rented == 1) {
+			rentButton.innerHTML = 'Return';
+			rentButton.setAttribute('class', 'rented');
 		} else {
 			rentButton.innerHTML = 'Rent';
+			rentButton.setAttribute('class', 'rent');
 		}
 		
 		video.appendChild(deleteButton);
@@ -60,30 +70,59 @@ function add(form) {
 	var category = form.category.value;
 	var length = form.length.value;
 	var statement = "add&name="+name+"&category="+category+"&length="+length;
-	emptyElements('videos');
+	emptyElements('videos', 'video');
 	request(statement);
+	updateCategories();
 }
 
 function deleteFunction(elem) {
 	console.log(elem.id);
 	var statement = "delete&id=" + elem.id;
-	emptyElements('videos');
+	emptyElements('videos', 'video');
 	request(statement);
+	updateCategories();
 }
 
 function flipRent(elem) {
-	console.log(elem.id);
-	var statement = 'rent&id=' + elem.id;
-	emptyElements('videos');
+	var rented;
+	if(elem.childNodes[2].innerHTML == 'Return') {
+		rented = 0;
+	} else {
+		rented = 1;
+	}
+	var statement = 'rent&id=' + elem.id + '&rented=' + rented;
+	emptyElements('videos', 'video');
+	console.log(statement);
 	request(statement);
 }
 
-function emptyElements(elem) {
+function emptyElements(elem, type) {
 	var container = document.getElementById(elem);
-	var elements = document.getElementsByClassName('video');
+	var elements = document.getElementsByClassName(type);
 	var id;
 	while (elements.length) {
 		id = elements[0].id;
 		container.removeChild(document.getElementById(id));
 	}
+}
+
+function updateCategories() {
+	request('categories');
+
+}
+
+function populateCategories() {
+	var container = document.getElementById('selectCategory');
+	var categories = JSON.parse(localStorage.getItem('categories'));
+	var choice;
+	var select = document.createElement('select');
+	select.setAttribute('class', 'menu');
+	select.setAttribute('id', 'select');
+	for(var prop in categories) {
+		choice = document.createElement('option');
+		choice.setAttribute('value', categories[prop]);
+		choice.innerHTML = categories[prop];
+		select.appendChild(choice);
+	}
+	container.appendChild(select);
 }
