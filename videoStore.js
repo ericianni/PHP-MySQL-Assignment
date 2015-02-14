@@ -1,5 +1,5 @@
 window.onload = function() {
-    request('load');
+    request('load&filter=all');
     localStorage.setItem('filter', 'all');
 };
 
