@@ -14,7 +14,7 @@
 		$insert->bind_param('ssii', $name, $category, $length, $rented);
 		$insert->execute();
 		$insert->close();
-		show($table, $mysqli);
+		filter($table, $mysqli);
 	}
 
 	function del($table, $mysqli) {
@@ -22,7 +22,7 @@
 		$insert->bind_param('i', $_GET['id']);
 		$insert->execute();
 		$insert->close();
-		show($table, $mysqli);
+		filter($table, $mysqli);
 	}
 
 	function rent($table, $mysqli) {
@@ -30,26 +30,71 @@
 		$insert->bind_param('ii', $_GET['rented'], $_GET['id']);
 		$insert->execute();
 		$insert->close();
-		show($table, $mysqli);
+		filter($table, $mysqli);
 	}
 
-	function categories($table, $mysqli) {
-		$results = $mysqli->query("SELECT category FROM $table");
-		$list = array();
-		while($cat = $results->fetch_assoc()) {
-			array_push($list, $cat['category']);
+	function filter($table, $mysqli) {
+		$filter = urldecode($_GET['filter']);
+		if($filter == 'all') {
+			show($table, $mysqli);
+		} else {
+			$sort = $mysqli->query("SELECT * FROM $table");
+			$slist = array();
+			while($row = $sort->fetch_assoc())
+			{
+				if($row['category'] == $filter) {
+					array_push($slist, $row);
+				}
+			}
+			$categories = $mysqli->query("SELECT category FROM $table");
+			$clist = array();
+			while($cat = $categories->fetch_assoc()) {
+				$found = 0;
+				foreach($clist as $thing) {
+					if($thing == $cat['category']) {
+						$found = 1;
+					}
+				}
+				if(!$found) {
+					array_push($clist, $cat['category']);
+				}
+			}
+			$temp = array();
+			array_push($temp, $slist);
+			array_push($temp, $clist);
+			echo json_encode(($temp));
 		}
-		echo json_encode($list);
+	}
+
+	function deleteAll($table, $mysqli) {
+		$mysqli->query("TRUNCATE TABLE $table");
+		show($table, $mysqli);
 	}
 
 	function show($table, $mysqli) {
 		$results = $mysqli->query("SELECT * FROM $table");
-		$list = array();
+		$vlist = array();
 		while($row = $results->fetch_assoc())
 		{
-			array_push($list, $row);
+			array_push($vlist, $row);
 		}
-		echo json_encode($list);
+		$categories = $mysqli->query("SELECT category FROM $table");
+		$clist = array();
+		while($cat = $categories->fetch_assoc()) {
+			$found = 0;
+				foreach($clist as $thing) {
+					if($thing == $cat['category']) {
+						$found = 1;
+					}
+				}
+				if(!$found) {
+					array_push($clist, $cat['category']);
+				}
+		}
+		$temp = array();
+		array_push($temp, $vlist);
+		array_push($temp, $clist);
+		echo json_encode($temp);
 	}
 
 	if($_GET['action'] === 'load') {
@@ -64,8 +109,12 @@
 				if($_GET['action'] === 'rent') {
 					rent($table, $mysqli);
 				} else {
-					if($_GET['action'] === 'categories') {
-						categories($table, $mysqli);
+					if($_GET['action'] === 'sort') {
+						filter($table, $mysqli);
+					} else {
+						if($_GET['action'] === 'deleteAll') {
+							deleteAll($table, $mysqli);
+						}
 					}
 				}
 			}

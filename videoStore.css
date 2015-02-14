@@ -1,0 +1,47 @@
+.videos {
+	width: 500px;
+}
+
+.video {
+	background-color: lightblue;
+	width: 500px;
+	height: 30px;
+}
+
+.videoName {
+	float: left;
+	background-color: lightyellow;
+	clear: left;
+	min-width: 200px;
+	margin: 5px;
+}
+.rented:hover, .rent:hover, .delete:hover {
+	outline: 2px solid black; 
+}
+.delete {
+	float: left;
+	background-color: pink;
+	width: 50px;
+	margin: 5px;
+}
+
+.rent, .rented {
+	float: left;
+	background-color: lightSalmon;
+	width: 50px;
+	margin: 5px;
+}
+
+.length {
+	float: left;
+	background-color: lightgreen;
+	width: 65px;
+	margin: 5px;
+}
+
+.category {
+	float: left;
+	background-color: tomato;
+	min-width: 75px;
+	margin: 5px;
+}
