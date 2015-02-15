@@ -1,0 +1,35 @@
+Start:	Wed Feb 11 13:00:00 2015 -0500
+End:	Wed Feb 11 15:15:00 2015 -0500
+Tasks:	Been struggling to get my stuff set up. Setting up my
+	project to use AJAX. Finding a way to store the table
+	locally.
+
+Start:	Wed Feb 11 16:00:00 2015 -0500
+End:	Wed Feb 11 18:32:43 2015 -0500
+Tasks:	Have add and delete working. Trying to get UPDATE to work.
+
+Start:	Wed Feb 11 20:00:00 2015 -0500
+End:	Wed Feb 11 21:37:02 2015 -0500
+Tasks: 	Adding, deleting, renting, all work. Trying to get categories
+	to work. The way I have it set up right now I am having my page build
+	before the AJAX request is returned with the needed data. This causes
+	my categories to be one step behind each add, delete, etc when the
+	server runs slow.
+
+Start:	Fri Feb 13 18:00:00 2015 -0500
+End:	Fri Feb 13 21:11:07 2015 -0500
+Tasks:	Updated the formatting. Changed the method of storing the
+	local filter so adding/deleting videos won't reset to all movies.
+	Added delete all. Fixed an unexpected error with some functions
+	creating unexpected end of file issues.
+
+Start:	Sat Feb 14 08:00:00 2015 -0500
+End:	Sat Feb 14 10:58:56 2015 -0500
+Tasks:	Cleaned up some functions and combined
+	the code of two functions into one.
+
+Start:	Sun Feb 15 07:30:00 2015 -0500
+End:	Sun Feb 15 10:35:13 2015 -0500
+Tasks:	Fixed up the look of the website and practiced my css. Also
+	found some code that was superfiluous.
+

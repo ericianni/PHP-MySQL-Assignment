@@ -6,35 +6,52 @@
 	if ($mysqli->connect_errno) {
     	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 	}
-
+	/**
+	 * Adds a video using the passed GET values
+	 * @param [string] $table  [name of database]
+	 * @param [mysqli connection] $mysqli [holds the videos in database]
+	 */
 	function add($table, $mysqli) {
 		$name = $_GET['name'];
 		$length = $_GET['length'];
 		$category = $_GET['category'];
 		$rented = 0;
-		$insert = $mysqli->prepare("INSERT INTO $table(name, category, length, rented) VALUES (?, ?, ?, ?)");
-		$insert->bind_param('ssii', $name, $category, $length, $rented);
-		$insert->execute();
-		$insert->close();
-		//filter($table, $mysqli);
+		$add = $mysqli->prepare("INSERT INTO $table(name, category, length, rented) VALUES (?, ?, ?, ?)");
+		$add->bind_param('ssii', $name, $category, $length, $rented);
+		$add->execute();
+		$add->close();
 	}
 
+	/**
+	 * dels a video using the passed GET values
+	 * @param [string] $table  [name of database]
+	 * @param [mysqli connection] $mysqli [holds the videos in database]
+	 */
 	function del($table, $mysqli) {
-		$insert = $mysqli->prepare("DELETE FROM $table WHERE id = ?");
-		$insert->bind_param('i', $_GET['id']);
-		$insert->execute();
-		$insert->close();
-		//filter($table, $mysqli);
+		$del = $mysqli->prepare("DELETE FROM $table WHERE id = ?");
+		$del->bind_param('i', $_GET['id']);
+		$del->execute();
+		$del->close();
 	}
 
+	/**
+	 * Updates the rented state of a video passed by GET
+	 * @param [string] $table  [name of database]
+	 * @param [mysqli connection] $mysqli [holds the videos in database]
+	 */
 	function rent($table, $mysqli) {
-		$insert = $mysqli->prepare("UPDATE $table SET rented = ? WHERE id = ?");
-		$insert->bind_param('ii', $_GET['rented'], $_GET['id']);
-		$insert->execute();
-		$insert->close();
-		//filter($table, $mysqli);
+		$rent = $mysqli->prepare("UPDATE $table SET rented = ? WHERE id = ?");
+		$rent->bind_param('ii', $_GET['rented'], $_GET['id']);
+		$rent->execute();
+		$rent->close();
 	}
 
+	/**
+	 * Applies a filter to the returned rows of the database
+	 * Returns results as a JSON object
+	 * @param [string] $table  [name of database]
+	 * @param [mysqli connection] $mysqli [holds the videos in database]
+	 */
 	function filter($table, $mysqli) {
 		$filter = urldecode($_GET['filter']);
 		$sort = $mysqli->query("SELECT * FROM $table");
@@ -64,36 +81,35 @@
 		echo json_encode($temp);
 	}
 
+	/**
+	 * Deletes all values from the database
+	 * @param [string] $table  [name of database]
+	 * @param [mysqli connection] $mysqli [holds the videos in database]
+	 */
 	function deleteAll($table, $mysqli) {
 		$mysqli->query("TRUNCATE TABLE $table");
-		//show($table, $mysqli);
 	}
 
-	if($_GET['action'] === 'load') {
-		filter($table, $mysqli);
-	} else {
-		if($_GET['action'] === 'add') {
+	/**
+	 * This switch calls the appropriate action
+	 */
+	$action = $_GET['action'];
+	switch ($action) {
+		case 'add':
 			add($table, $mysqli);
-			filter($table, $mysqli);
-		} else {
-			if($_GET['action'] === 'delete') {
-				del($table, $mysqli);
-				filter($table, $mysqli);
-			} else {
-				if($_GET['action'] === 'rent') {
-					rent($table, $mysqli);
-					filter($table, $mysqli);
-				} else {
-					if($_GET['action'] === 'sort') {
-						filter($table, $mysqli);
-					} else {
-						if($_GET['action'] === 'deleteAll') {
-							deleteAll($table, $mysqli);
-							filter($table, $mysqli);
-						}
-					}
-				}
-			}
-		}
+			break;
+		case 'delete':
+			del($table, $mysqli);
+			break;
+		case 'rent':
+			rent($table, $mysqli);
+			break;
+		case 'deleteAll':
+			deleteAll($table, $mysqli);
+			break;
+		default:
+			# code...
+			break;
 	}
+	filter($table, $mysqli);
  ?>
