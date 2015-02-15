@@ -37,7 +37,9 @@ function request(action) {
             localStorage.setItem('categories', JSON.stringify(temp[1]));
             display();
             emptyElements('selectCategory', 'menu');
-            populateCategories();
+            if (localStorage.getItem('categories').length > 2) {
+                populateCategories();
+            }
         }
     };
 }
@@ -101,21 +103,22 @@ function add(form) {
     var name = encodeURI(form.name.value);
     var category = encodeURI(form.category.value);
     var filter = encodeURI(localStorage.getItem('filter'));
+    if (category == '') {
+        category = 'No Genre';
+    }
     var length = form.length.value;
+    if (length == '') {
+        length = 0;
+    }
     if (name == null || name == '') {
         alert('Please input a name.');
         return;
     } else {
-        if (category == null || category == '') {
-            alert('Please input a category.');
+        if (!Number.isInteger(parseInt(length, 10)) || length < 0) {
+            alert('Please input a positive integer for Length.');
             return;
-        } else {
-            if (length == null || length == '' || length < 1) {
-                alert('Please input an integer greater than 0.');
-                return;
             }
         }
-    }
     var statement = 'add&name=' + name + '&category=' +
         category + '&length=' + length + '&filter=' +
         filter;
@@ -219,6 +222,9 @@ function populateCategories() {
     select.appendChild(choice);
 
     for (var prop in categories) {
+        if (categories[prop] == 'No Genre') {
+            continue;
+        }
         choice = document.createElement('option');
         choice.setAttribute('value', categories[prop]);
         choice.textContent = categories[prop];
