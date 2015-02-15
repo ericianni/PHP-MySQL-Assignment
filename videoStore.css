@@ -1,10 +1,50 @@
-.videos {
-	width: 750px;
+* {
+	font-family: Arial;
+}
+
+#videos, #addVideo {
+	/*float: left;*/
+	margin-left: auto;
+	margin-right: auto;
+	width: 600px;
+	overflow: auto;
+	padding: 5px;
+	background-color: lightblue;
+	clear: left;
+}
+
+#vender {
+	position: relative;
+	top: 10px;
+	left: -100px;
+	float: right;
+	font-size: 20px;
+	text-align: center;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#addVideo {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+
+}
+
+#videos {
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.menu {
+	margin: 5px;
+	float: left;
+	width: 100px;
+	height: 20px;
 }
 
 .video {
 	background-color: lightblue;
-	width: 750px;
+	width: 600px;
 	height: 30px;
 }
 
@@ -12,8 +52,9 @@
 	float: left;
 	background-color: lightyellow;
 	clear: left;
-	min-width: 200px;
+	min-width: 250px;
 	margin: 5px;
+	padding-left: 5px;
 }
 .rented:hover, .rent:hover, .delete:hover {
 	outline: 2px solid black; 
@@ -23,6 +64,9 @@
 	background-color: pink;
 	width: 50px;
 	margin: 5px;
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 .rent, .rented {
@@ -30,18 +74,50 @@
 	background-color: lightSalmon;
 	width: 50px;
 	margin: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: center;
 }
 
 .length {
 	float: left;
 	background-color: lightgreen;
-	width: 65px;
+	width: 70px;
 	margin: 5px;
+	padding-right: 5px;
+	text-align: right;
 }
 
 .category {
 	float: left;
 	background-color: tomato;
-	min-width: 75px;
+	min-width: 100px;
 	margin: 5px;
+	text-align: center;
+}
+
+.prompt {
+	margin: 5px;
+	float: left;
+	width: 100px;
+	height: 20px;
+	text-align: right;
+	clear: left;
+}
+
+.input {
+	margin: 5px;
+	float: left;
+	width: 160px;
+	text-align: left;
+}
+
+.addButton {
+	margin: 5px;
+	float: left;
+}
+
+.delAll {
+	margin: 5px;
+	float: left;
 }

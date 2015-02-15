@@ -88,7 +88,7 @@ function add(form) {
             alert('Please input a category.');
             return;
         } else {
-            if (length == null || length == "") {
+            if (length == null || length == "" || length < 1) {
                 alert('Please input an integer greater than 0.');
                 return;
             }
@@ -151,10 +151,6 @@ function emptyElements(elem, type) {
         container.removeChild(document.getElementById(id));
     }
 }
-
-/*function updateCategories() {
-    request('categories');
-}*/
 
 function populateCategories() {
     var container = document.getElementById('selectCategory');

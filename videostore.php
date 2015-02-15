@@ -1,6 +1,8 @@
 <?php 
+	include 'login.php';
+
 	$table = 'TEST';
-	$mysqli = new mysqli("oniddb.cws.oregonstate.edu", "iannie-db", "6kRBxp0O6k2hf4rb", "iannie-db");
+	$mysqli = new mysqli($host, $user, $pwd, $databaseName);
 	if ($mysqli->connect_errno) {
     	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 	}
@@ -66,32 +68,6 @@
 		$mysqli->query("TRUNCATE TABLE $table");
 		//show($table, $mysqli);
 	}
-
-	/*function show($table, $mysqli) {
-		$results = $mysqli->query("SELECT * FROM $table");
-		$vlist = array();
-		while($row = $results->fetch_assoc())
-		{
-			array_push($vlist, $row);
-		}
-		$categories = $mysqli->query("SELECT category FROM $table");
-		$clist = array();
-		while($cat = $categories->fetch_assoc()) {
-			$found = 0;
-				foreach($clist as $thing) {
-					if($thing == $cat['category']) {
-						$found = 1;
-					}
-				}
-				if(!$found) {
-					array_push($clist, $cat['category']);
-				}
-		}
-		$temp = array();
-		array_push($temp, $vlist);
-		array_push($temp, $clist);
-		echo json_encode($temp);
-	}*/
 
 	if($_GET['action'] === 'load') {
 		filter($table, $mysqli);
